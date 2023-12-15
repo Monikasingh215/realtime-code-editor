@@ -9,6 +9,7 @@ import ACTIONS from '../Actions';
 
 const Editor = ({ socketRef, roomId, onCodeChange }) => {
     const editorRef = useRef(null);
+    const socketReference = socketRef
     useEffect(() => {
         async function init() {
             editorRef.current = Codemirror.fromTextArea(
@@ -35,7 +36,7 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
             });
         }
         init();
-    }, [onCodeChange, roomId, socketRef]);
+    }, [onCodeChange, roomId, socketReference]);
 
     useEffect(() => {
         if (socketRef.current) {
