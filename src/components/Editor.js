@@ -9,7 +9,6 @@ import ACTIONS from '../Actions';
 
 const Editor = ({ socketRef, roomId, onCodeChange }) => {
     const editorRef = useRef(null);
-    const socketReference = socketRef
     useEffect(() => {
         async function init() {
             editorRef.current = Codemirror.fromTextArea(
@@ -36,21 +35,23 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
             });
         }
         init();
-    }, [onCodeChange, roomId, socketReference]);
+    }, [onCodeChange, roomId, socketRef]);
 
+    const reference = socketRef.current
     useEffect(() => {
-        if (socketRef.current) {
-            socketRef.current.on(ACTIONS.CODE_CHANGE, ({ code }) => {
+        if (reference) {
+            reference.on(ACTIONS.CODE_CHANGE, ({ code }) => {
                 if (code !== null) {
                     editorRef.current.setValue(code);
                 }
             });
         }
 
+
         return () => {
-            socketRef.current.off(ACTIONS.CODE_CHANGE);
+            reference.off(ACTIONS.CODE_CHANGE);
         };
-    }, [socketRef.current]);
+    }, [reference]);
 
     return <textarea id="realtimeEditor"></textarea>;
 };
